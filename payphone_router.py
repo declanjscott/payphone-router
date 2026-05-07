@@ -406,20 +406,44 @@ def write_html(
 if __name__ == "__main__":
     load_dotenv()
 
-    OSRM_PATH = os.environ.get("OSRM_PATH", "./routing/nsw_osm")
+    _missing = [
+        v
+        for v in ("HOME_COORDINATES", "PLAYER_USERNAME", "OSRM_PATH")
+        if not os.environ.get(v)
+    ]
+    if _missing:
+        raise SystemExit(
+            f"Missing required environment variables: {', '.join(_missing)}\n"
+            "Copy .env.example to .env and fill in the required values."
+        )
+
+    OSRM_PATH = os.environ["OSRM_PATH"]
+    FILE_TO_CHECK = f"{OSRM_PATH}.osrm.fileIndex"
+    if not os.path.exists(FILE_TO_CHECK):
+        raise SystemExit(
+            f"OSRM data not found at '{FILE_TO_CHECK}'.\n"
+            "Run the OSRM preprocessing steps from the README before continuing."
+        )
+
     lat, lon = os.environ["HOME_COORDINATES"].split(",")
     HOME_COORDINATES = (float(lat), float(lon))
-    PAYPHONE_FILTER_RADIUS_M = 8000
+    PAYPHONE_FILTER_RADIUS_M = int(os.environ.get("PAYPHONE_FILTER_RADIUS_M", "8000"))
     PLAYER_USERNAME = os.environ["PLAYER_USERNAME"]
-    DISTANCE_BUDGET_METRES = 7000
-    MAX_LEG_DISTANCE_METRES = 1700
+    DISTANCE_BUDGET_METRES = int(os.environ.get("DISTANCE_BUDGET_METRES", "7000"))
+    MAX_LEG_DISTANCE_METRES = int(os.environ.get("MAX_LEG_DISTANCE_METRES", "1500"))
     MAX_LATITUDE: float | None = (
-        None  # you can set a latitude cap - I use it to avoid being sent into the city
+        float(os.environ.get("MAX_LATITUDE"))
+        if os.environ.get("MAX_LATITUDE")
+        else None
     )
     START_PAYPHONE_ID_OVERRIDE: int | None = (
-        None  # Set to a payphone ID to force a specific start
+        int(os.environ.get("START_PAYPHONE_ID_OVERRIDE"))
+        if os.environ.get("START_PAYPHONE_ID_OVERRIDE")
+        else None
     )
-    EXCLUDE_ALL_PAST_CAPTURES: bool = False  # Set this to True to exclude any you've previously captured, not just current held.
+    EXCLUDE_ALL_PAST_CAPTURES: bool = os.environ.get(
+        "EXCLUDE_ALL_PAST_CAPTURES", "true"
+    ).lower() not in ("false", "0", "no")
 
     payphones = fetch_payphones(
         PLAYER_USERNAME, exclude_past_captures=EXCLUDE_ALL_PAST_CAPTURES

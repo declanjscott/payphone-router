@@ -58,25 +58,26 @@ cp .env.example .env
 
 Then edit `.env` with your values:
 
-| Variable | Description | Example |
-|---|---|---|
-| `HOME_COORDINATES` | Your home coordinates as `lat,lon` — used as the centre for filtering and as the default run start | `-33.88261070811789, 151.20667753711774` |
-| `PLAYER_USERNAME` | Your in-game username — phones held by you and your cell-mates are excluded | `GoldenFalcon` |
-| `OSRM_PATH` | Path to the OSRM data files | `./routing/nsw_osm` |
+**Required**
 
-> `.env` is gitignored — never commit your coordinates or username.
+| Variable | Description |
+|---|---|
+| `HOME_COORDINATES` | Your home coordinates as `lat,lon` — used as the centre for filtering and as the default run start |
+| `PLAYER_USERNAME` | Your in-game username — phones held by you and your cell-mates are excluded |
+| `OSRM_PATH` | Relative path to the OSRM data files (must be preprocessed — see OSRM setup above) |
 
-### Other constants
+**Optional**
 
-The remaining constants are set directly in the `if __name__ == "__main__":` block in [payphone_router.py](payphone_router.py):
-
-| Constant | Description | Default |
+| Variable | Description | Default |
 |---|---|---|
 | `PAYPHONE_FILTER_RADIUS_M` | Only consider payphones within this radius of home (metres) | `8000` |
 | `DISTANCE_BUDGET_METRES` | Maximum total run distance (metres) | `7000` |
-| `MAX_LEG_DISTANCE_METRES` | Maximum walking distance between any two consecutive phones (metres) | `2000` |
-| `MAX_LATITUDE` | Exclude payphones above this latitude; `None` to disable | `None` |
-| `START_PAYPHONE_ID_OVERRIDE` | Set to a phone ID to force a specific starting phone; `None` to use the nearest to home | `None` |
+| `MAX_LEG_DISTANCE_METRES` | Maximum walking distance between any two consecutive phones (metres) | `1500` |
+| `MAX_LATITUDE` | Exclude payphones above this latitude; leave empty to disable | _(disabled)_ |
+| `START_PAYPHONE_ID_OVERRIDE` | Set to a phone ID to force a specific starting phone; leave empty to use nearest to home | _(nearest to home)_ |
+| `EXCLUDE_ALL_PAST_CAPTURES` | `true` to exclude phones you've previously captured (not just currently held); `false` to include them | `true` |
+
+> `.env` is gitignored — never commit your coordinates or username.
 
 ## Running
 
