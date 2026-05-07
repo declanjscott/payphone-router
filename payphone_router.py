@@ -4,7 +4,7 @@ import multiprocessing
 import os
 import time
 import osrm
-from pathlib import Path
+from dotenv import load_dotenv
 from typing import TypedDict
 
 import requests
@@ -364,11 +364,13 @@ def write_html(
 
 
 if __name__ == "__main__":
+    load_dotenv()
+
     lat, lon = os.environ["HOME_COORDINATES"].split(",")
     HOME_COORDINATES = (float(lat), float(lon))
     PAYPHONE_FILTER_RADIUS_M = 8000
     PLAYER_USERNAME = os.environ["PLAYER_USERNAME"]
-    DISTANCE_BUDGET_METRES = 8000
+    DISTANCE_BUDGET_METRES = 7000
     MAX_LEG_DISTANCE_METRES = 1500
     START_PAYPHONE_ID_OVERRIDE: int | None = (
         2379  # Set to a payphone ID to force a specific start
