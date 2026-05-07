@@ -373,7 +373,7 @@ if __name__ == "__main__":
     PAYPHONE_FILTER_RADIUS_M = 8000
     PLAYER_USERNAME = os.environ["PLAYER_USERNAME"]
     DISTANCE_BUDGET_METRES = 7000
-    MAX_LEG_DISTANCE_METRES = 2000
+    MAX_LEG_DISTANCE_METRES = 1700
     MAX_LATITUDE: float | None = (
         None  # you can set a latitude cap - I use it to avoid being sent into the city
     )
