@@ -359,6 +359,7 @@ def write_html(
     with open("index_template.html") as f:
         html = f.read()
     html = html.replace("<!-- INLINE_DATA -->", inline_script)
+    os.makedirs("public", exist_ok=True)
     with open("public/index.html", "w") as f:
         f.write(html)
 
