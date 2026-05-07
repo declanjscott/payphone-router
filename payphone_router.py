@@ -258,8 +258,10 @@ def solve_cp_sat(
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit
     solver.parameters.num_search_workers = multiprocessing.cpu_count()
+    solve_start = time.time()
     status = solver.solve(model)
-    print(f"Solver finished with status {solver.status_name(status)}")
+    elapsed = time.time() - solve_start
+    print(f"Solver finished with status {solver.status_name(status)} in {elapsed:.1f} seconds")
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return None
 
